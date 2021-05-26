@@ -433,8 +433,10 @@ header {
 	text-align: center;
 	width: max-content;
 	padding: 0px 20px;
+	position: relative;
 }
 
+.SignButton {}
 
 .SignButton:hover {
 	cursor: pointer;
@@ -512,4 +514,69 @@ header {
 	color: honeydew;
 	padding-left: 20px;
 	cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+	.CartDetail {
+		position: absolute;
+		right: 8px;
+		top: -9px;
+		font-weight: 700;
+		font-size: 13px;
+	}
+	.CartTitle {
+		display: none;
+	}
+	.CartDetail {
+		display: inline;
+	}
+	.UserNameBox p {
+		display: none;
+	}
+	.NavigationPanel {
+		display: block;
+		width: 100%;
+	}
+	.Books {
+		width: 100%;
+		margin-top: 25px;
+	}
+	.CategoryButton {
+		display: block;
+	}
+	.NavBar {
+		height: auto;
+	}
+	.Book {
+		float: unset;
+		width: 100%;
+		margin: 15px 20px;
+	}
+	.pagination {
+		max-width: 100%;
+		flex-wrap: wrap;
+	}
+	.SearchBar {
+		display: block;
+	}
+	.SearchBar img {
+		display: block;
+	}
+	.SearchBar input {
+		display: inline-block;
+		width: 70%!important;
+	}
+	.SearchBar button {
+		display: inline-block;
+		width: 20%;
+		margin: 0;
+		vertical-align: bottom;
+	}
+	.SearchBar button {
+		display: inline-block;
+		width: 20%;
+	}
+	.Sign {
+		position: unset!important;
+	}
 }

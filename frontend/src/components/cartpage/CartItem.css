@@ -15,9 +15,12 @@
 }
 
 .cart-item-container .minus-button {
+    margin-top: 60px;
     margin-left: 100px;
 }
 .cart-item-container .plus-button {
+    margin-top: 60px;
+    top: 50%;
     margin-right: 100px;
 }
 
