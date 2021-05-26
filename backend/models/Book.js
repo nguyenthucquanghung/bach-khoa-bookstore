@@ -160,15 +160,14 @@ const bookSchema = new Schema({
 });
 
 bookSchema.method('toClient', function () {
-    // const book = this.toObject();
+    const book = this.toObject();
 
-    // delete employee.__v;
-    // delete employee.deletedAt;
-    // delete employee.createdAt;
-    // delete employee.updatedAt;
+    delete book.__v;
+    delete book.deletedAt;
+    delete book.createdAt;
+    delete book.updatedAt;
 
-    // return book;
-    return (this.toObject());
+    return (book);
 });
 
 const bookModel = BaseModel.model('books', bookSchema);
@@ -205,6 +204,20 @@ class Book {
             });
         });
     }
+
+    static getBookById(id) {
+        return new Promise((resolve, reject) => {
+            const query = bookModel.find({_id: id});
+            query.exec((err, docs) => {
+                if (docs) {
+                    resolve(docs);
+                } else {
+                    reject(err);
+                }
+            })
+        })
+    }
 }
 
 module.exports = Book;
+module.exports.bookSchema = bookSchema

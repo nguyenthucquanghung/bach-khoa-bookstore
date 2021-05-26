@@ -1,0 +1,47 @@
+.cart-page-container{
+    display: block;
+}
+.SearchBar {
+    border-bottom: 1px solid gainsboro;
+}
+.cart-title {
+    border-left: 3px solid salmon;
+    padding-left: 20px;
+    color: salmon;
+}
+
+.total-cost{
+    font-size: 25pt;
+    color: salmon;
+    width: 100%;
+    text-align: center;
+}
+
+.total-title {
+    display: inline;
+}
+
+.buy {
+    font-size: 30pt;
+    font-weight: 600;
+    margin: 30px;
+    padding: 15px;
+    background-color: salmon;
+    color: snow;
+    border: none;
+    border-radius: 10px;
+}
+
+.buy:hover {
+    cursor: pointer;
+    padding: 20px
+}
+
+.empty-message {
+    position: absolute;
+    align-content: center;
+    text-align: center;
+    right:40%;
+    top: 50%;
+    color: gray;
+}

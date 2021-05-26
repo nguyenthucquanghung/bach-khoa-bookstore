@@ -7,12 +7,63 @@
 const employeeController = require('./controllers/EmployeeController');
 const bookController = require('./controllers/BookController');
 const projectController = require('./controllers/ProjectController');
+const userController = require('./controllers/UserController');
 
 const routes = [
+    {
+        method: 'POST',
+        path: '/user',
+        handler: userController.signUp.bind(userController)
+    },
+    {
+        method: 'POST',
+        path: '/user/cart',
+        handler: userController.addToCart.bind(userController)
+    },
+    {
+        method: 'DELETE',
+        path: '/user/cart',
+        handler: userController.deleteFromCart.bind(userController)
+    },
+    {
+        method: 'DELETE',
+        path: '/user/cart/item',
+        handler: userController.deleteItemFromCart.bind(userController)
+    },
+    {
+        method: 'POST',
+        path: '/user/cart/buy',
+        handler: userController.buy.bind(userController)
+    },
+    {
+        method: 'GET',
+        path: '/user/profile',
+        handler: userController.getUser.bind(userController)
+    },
+    {
+        method: 'POST',
+        path: '/user/login',
+        handler: userController.signIn.bind(userController)
+    },
+    {
+        method: 'POST',
+        path: '/user/logout',
+        handler: userController.signOut.bind(userController)
+    },
+    {
+        method: 'POST',
+        path: '/user/logoutall',
+        handler: userController.signOutAll.bind(userController)
+    },
     {
         method: 'GET',
         path: '/books',
         handler: bookController.index.bind(bookController)
+    },
+    {
+        method: 'GET',
+        path: '/search/books',
+        handler: bookController.search.bind(bookController)
     },
     {
         method: 'GET',

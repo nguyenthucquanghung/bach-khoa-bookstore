@@ -51,6 +51,7 @@
   padding-right: 8px;
   height: 35px;
   width: 200px;
+  text-overflow: inherit;
 }
 .AuthorMain {
   margin-top: 0;

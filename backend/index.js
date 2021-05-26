@@ -12,7 +12,12 @@ process.on('uncaughtException', function (err) {
 
 
 const server = http.createServer(async (req, res) => {
-        await router(req, res, routes);
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'PATCH, DELETE, POST, OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Max-Age', 2592000);
+    await router(req, res, routes);
     }
 );
 

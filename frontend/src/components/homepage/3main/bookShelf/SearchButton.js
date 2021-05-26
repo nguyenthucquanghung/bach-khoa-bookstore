@@ -11,9 +11,9 @@ class SearchButton extends Component {
         return (
           <div className='SeachButton' style={this.props.color}>
             <FaSearch className='iconSearch' />
-            <Link to = {'/search'}>
+            {/* <Link to = {'/search'}> */}
             <span onClick = {e => console.log(this.props.keyword)} >Search</span>
-            </Link>
+            {/* </Link> */}
           </div>
         );
       }

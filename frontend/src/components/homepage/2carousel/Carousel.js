@@ -40,7 +40,7 @@ class Carousel extends Component {
         const color = backgroundColors[i];
         const dark = darkColors[i];
         carouselBooks.push(
-          <div key={i} ><BookCard bookInfo={this.state.bookInfo.store[i].books[0]} style={color} dark={dark}></BookCard></div>
+          // <div key={i} ><BookCard bookInfo={this.state.bookInfo.store[i].books[0]} style={color} dark={dark}></BookCard></div>
         );
       };
       

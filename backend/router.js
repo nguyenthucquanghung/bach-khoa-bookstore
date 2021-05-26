@@ -2,7 +2,11 @@ const helpers = require('./common/helpers');
 const querystring = require('querystring');
 
 module.exports = async (req, res, routes) => {
-
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
     // Find a matching route
     const route = routes.find((route) => {
         const methodMatch = route.method === req.method;
@@ -19,7 +23,6 @@ module.exports = async (req, res, routes) => {
 
         return pathMatch && methodMatch;
     });
-
     // Extract the "id" parameter from route and pass it to controller
     let param = null;
 
@@ -40,7 +43,6 @@ module.exports = async (req, res, routes) => {
         if (req.method === 'POST' || req.method === 'PUT') {
             body = await getPostData(req);
         }
-
         return route.handler(req, res, param, body, params);
     }
     else {

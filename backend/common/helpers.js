@@ -6,7 +6,7 @@ module.exports.validationError = (res, error = 'Data provided is not valid') => 
     res.end(JSON.stringify({
         status: 'fail',
             error
-    }, null, 3));
+    }, null, 4));
 };
 
 module.exports.error = (res, error = 'An unknown error occurred', statusCode = 500) => {
@@ -17,8 +17,17 @@ module.exports.error = (res, error = 'An unknown error occurred', statusCode = 5
     res.end(JSON.stringify({
         status: 'fail',
         error
-    }, null, 3));
+    }, null, 4));
 };
+
+module.exports.unauthorized = (res, error = 'Unauthorized', statusCode = 401) => {
+    addHeaders(res);
+    res.statusCode = statusCode;
+    res.end(JSON.stringify({
+        status: 'unauthorized',
+        error
+    }, null, 4));
+}
 
 module.exports.success = (res, data = null, meta = null) => {
     addHeaders(res);
@@ -29,7 +38,7 @@ module.exports.success = (res, data = null, meta = null) => {
         status: 'success',
         data,
         meta
-    }, null, 3));
+    }, null, 4));
 };
 
 const addHeaders = (res) => {
