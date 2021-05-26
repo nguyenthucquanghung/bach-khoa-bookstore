@@ -1,8 +1,11 @@
 const User = require('./../models/User');
 const helpers = require('./../common/helpers');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 const auth = require('./../middleware/auth');
-const Book = require('./../models/Book')
+const Book = require('./../models/Book');
+const Cart = require('./../models/Cart');
+const {CartStatus} = require('./../common/constants');
+const mongoose = require('mongoose');
 
 class UserController {
     // POST /user
@@ -140,14 +143,24 @@ class UserController {
     async buy(req, res) {
         try {
             const user = await auth(req, res);
+            const newCart = await Cart.create({
+                time: (new Date()).getTime(),
+                status: 0,
+                userId: user._id,
+                username: user.name,
+                email: user.email,
+                books: user.currentCart
+            });
             user.boughtCarts.push({
                 time: (new Date()).getTime(),
                 books: user.currentCart
-            })
+            });
             user.currentCart = [];
             user.save();
+
             return helpers.success(res);
         } catch (error) {
+            console.log(error)
             return helpers.error(res, error)
         }
 

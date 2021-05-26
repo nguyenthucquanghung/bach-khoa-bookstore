@@ -1,332 +1,207 @@
-const mongoose = require('mongoose');
-const Employee = require('../models/Category');
-const Project = require('../models/Cart');
+const Cart = require('../models/Cart');
 const helpers = require('./../common/helpers');
+const Employee = require('../models/Category');
+const auth = require('./../middleware/auth');
+
+const mongoose = require('mongoose');
 
 class CartController {
-    // GET /employee
-    async index (req, res) {
+    // GET /cart
+    async index(req, res) {
         try {
-            const selectParams = {
-                _id: 1,
-                name: 1,
-                email: 1
-            };
+            // const selectParams = {
+            //     _id: 1,
+            //     name: 1,
+            //     managerId: 1,
+            //     employeeIds: 1
+            // };
 
-            const employees = await Employee.getAll({}, selectParams);
+            const projects = await Cart.getAll({});
 
-            return helpers.success(res, employees);
-        }
-        catch (error) {
+            return helpers.success(res, projects);
+        } catch (error) {
             return helpers.error(res, error);
         }
     }
 
-    // POST /employee
-    async create (req, res, param, postData) {
+    async getByUser(req, res) {
+        try {
+            const user = await auth(req, res);
+            const carts = await Cart.getAll({userId: user._id});
+            return helpers.success(res, carts);
+        } catch (error) {
+            return helpers.error(res, error);
+        }
+    }
+
+    // POST /cart
+    async create(req, res, param, postData) {
         postData = JSON.parse(postData);
-        let { name, email, isManager = false, managerId = null, peers = [] } = postData;
+
+        let {name, employeeIds = [], managerId = null} = postData;
+
+        if (!(employeeIds instanceof Array)) {
+            employeeIds = [employeeIds];
+        }
 
         try {
             let manageExists = await this.validateManager(managerId);
 
             if (!manageExists) {
-                return helpers.validationError(res, 'managerId is invalid');
+                return helpers.validationError(res, 'Manager is invalid');
             }
+
+            let employeesExists = await this.validateEmployees(employeeIds);
+
+            if (!employeesExists) {
+                return helpers.validationError(res, 'Employee(s) is invalid');
+            }
+
+            employeeIds = employeeIds.map(element => {
+                return mongoose.Types.ObjectId(element)
+            });
 
             if (managerId !== null) {
                 managerId = mongoose.Types.ObjectId(managerId);
             }
 
-            if (! (peers instanceof Array)) {
-                peers = [peers];
-            }
+            const project = await Cart.create({name, employeeIds, managerId});
 
-            let peersExists = await this.validatePeers(peers, isManager);
-
-            if (!peersExists) {
-                return helpers.validationError(res, 'Peer(s) is invalid');
-            }
-
-            if (peers.length > 0) {
-                peers = peers.map((el) => { return mongoose.Types.ObjectId(el); });
-            }
-
-            const employee = await Employee.create({ name, email, isManager, managerId, peers });
-
-            // set managerId of all peers
-            if (employee.peers.length > 0) {
-                const update = {$set: {managerId: mongoose.Types.ObjectId(employee._id)}};
-                await Employee.update({_id: {$in: employee.peers}}, update, {multi: true});
-            }
-
-            return helpers.success(res, employee.toClient());
-        }
-        catch (error) {
+            return helpers.success(res, project);
+        } catch (error) {
             if (error.name === 'ValidationError') {
                 return helpers.validationError(res, error);
-            }
-            else if (error.message.indexOf('duplicate key error') !== -1) {
-                return helpers.validationError(res, 'Email already exists');
-            }
-            else {
+            } else {
                 return helpers.error(res);
             }
         }
     }
 
-    // GET /employee/:id
-    async show (req, res, param) {
+    // GET /cart/:id
+    async show(req, res, param) {
         try {
-            const pipeline = [
+            const aggPipeline = [
                 {
-                    "$match" : {
-                        "_id" : mongoose.Types.ObjectId(param)
+                    "$match": {
+                        "_id": mongoose.Types.ObjectId(param)
                     }
                 },
                 {
-                    "$project" : {
-                        "_id" : 1,
-                        "isManager" : 1,
-                        "name" : 1,
-                        "email" : 1,
-                        "managerId" : 1
+                    "$lookup": {
+                        "from": "employees",
+                        "localField": "managerId",
+                        "foreignField": "_id",
+                        "as": "manager"
                     }
                 },
                 {
-                    "$lookup" : {
-                        "from" : "employees",
-                        "localField" : "managerId",
-                        "foreignField" : "_id",
-                        "as" : "manager"
+                    "$lookup": {
+                        "from": "employees",
+                        "localField": "employeeIds",
+                        "foreignField": "_id",
+                        "as": "employees"
                     }
                 },
                 {
-                    "$project" : {
-                        "manager" : {
-                            "isManager" : 0,
-                            "peers" : 0,
-                            "managerid" : 0,
-                            "createdAt" : 0,
-                            "updatedAt" : 0,
-                            "__v" : 0
+                    "$project": {
+                        "_id": 1,
+                        "name": 1,
+                        "manager": {
+                            "_id": 1,
+                            "name": 1
                         },
-                        "managerId" : 0
-                    }
-                },
-                {
-                    "$lookup" : {
-                        "from" : "projects",
-                        "localField" : "_id",
-                        "foreignField" : "employeeIds",
-                        "as" : "projects"
-                    }
-                },
-                {
-                    "$project" : {
-                        "projects" : {
-                            "employeeIds" : 0,
-                            "managerId" : 0,
-                            "createdAt" : 0,
-                            "updatedAt" : 0,
-                            "__v" : 0
+                        "employees": {
+                            "_id": 1,
+                            "name": 1
                         }
                     }
                 }
             ];
 
-            const employee = await Employee.aggregation(pipeline);
+            const project = await Cart.aggregation(aggPipeline);
 
-            return helpers.success(res, employee);
-        }
-        catch (error) {
+            return helpers.success(res, project);
+        } catch (error) {
             return helpers.error(res, error);
         }
     }
 
-    // PUT /employee/:id
-    async update (req, res, param, postData) {
-        let employee;
-
+    // PUT /cart/:id
+    async update(req, res, param, postData) {
+        console.log(postData)
         try {
-            employee = await Employee.get({ _id: param }, { isManager: 1 });
-        }
-        catch (e) {
-            console.log(e);
-        }
+            param = mongoose.Types.ObjectId(param);
+            const options = {
+                new: true
+            };
 
-        if (!employee) {
-            return helpers.error(res, 'Entity not found', 404);
-        }
+            const project = await Cart.findOneAndUpdate({_id: param}, {$set: JSON.parse(postData)}, options);
 
-        postData = JSON.parse(postData);
-
-        let updateData = {
-            isManager: employee.isManager
-        };
-
-        if (postData.name) {
-            updateData.name = postData.name;
-        }
-
-        if (postData.email) {
-            updateData.email = postData.email;
-        }
-
-        if (postData.isManager) {
-            updateData.isManager = true;
-        }
-
-        let { managerId = null, peers = null } = postData;
-
-        try {
-            let manageExists = await this.validateManager(managerId);
-
-            if (!manageExists) {
-                return helpers.validationError(res, 'managerId is invalid');
-            }
-
-            if (managerId !== null) {
-                updateData.managerId = mongoose.Types.ObjectId(managerId);
-            }
-
-            if (peers !== null && ! (peers instanceof Array)) {
-                peers = [peers];
-            }
-
-            let peersExists = await this.validatePeers(peers, updateData.isManager);
-
-            if (!peersExists) {
-                return helpers.validationError(res, 'Peer(s) is invalid');
-            }
-
-            if (peers && peers.length > 0) {
-                peers = peers.map((el) => { return mongoose.Types.ObjectId(el); });
-            }
-
-            if (peers !== null) {
-                updateData.peers = peers;
-            }
-
-            const employee = await Employee.findOneAndUpdate({ _id: param }, { $set: updateData }, { new: true });
-
-            // set managerId of all peers
-            if (employee.peers.length > 0) {
-                const update = {$set: {managerId: mongoose.Types.ObjectId(employee._id)}};
-                await Employee.update({ _id: {$in: employee.peers} }, update, { multi: true });
-            }
-
-            return helpers.success(res, employee.toClient());
-        }
-        catch (error) {
-            console.log(error);
-
+            return helpers.success(res, project);
+        } catch (error) {
             if (error.name === 'ValidationError') {
                 return helpers.validationError(res, error);
-            }
-            else if (error.message.indexOf('duplicate key error') !== -1) {
-                return helpers.validationError(res, 'Email already exists');
-            }
-            else {
+            } else {
+                console.log(error);
                 return helpers.error(res);
             }
         }
     }
 
     // DELETE /employee/:id
-    async delete (req, res, param) {
-        let employee;
+    async delete(req, res, param) {
+        param = mongoose.Types.ObjectId(param);
+
+        let project;
         try {
-            employee = await Employee.get({ _id: param }, { isManager: 1 });
-        }
-        catch (e) {
+            project = await Cart.get({_id: param}, {_id: 1});
+        } catch (e) {
             console.log(e);
         }
 
-        if (!employee) {
+        if (!project) {
             return helpers.error(res, 'Entity not found', 404);
         }
 
         try {
-            let update, conditions;
+            let conditions = {_id: param};
 
-            // delete employee from project
-            try {
-                update = { $pull: { employeeIds: mongoose.Types.ObjectId(param) } };
-                await Project.update({}, update, {multi: true});
-            }
-            catch (e) {
-                console.log('Error in delete employee from project', e);
-            }
-
-            // delete managerId from project
-            try {
-                update = { $set: { managerId: null } };
-                await Project.update({managerId: mongoose.Types.ObjectId(param)}, update, {multi: true});
-            }
-            catch (e) {
-                console.log('Error in delete employee from project', e);
-            }
-
-            // delete peers
-            try {
-                update = { $pull: { peers: mongoose.Types.ObjectId(param) } };
-                await Employee.update({}, update, {multi: true});
-            }
-            catch (e) {
-                console.log('delete peers', e);
-            }
-
-            // set manager to null
-            try {
-                conditions = {managerId: mongoose.Types.ObjectId(param)};
-                update = { $set: { managerId: null } };
-                await Employee.update(conditions, update, {multi: true});
-            }
-            catch (e) {
-                console.log('set manager to null', e);
-            }
-
-            conditions = { _id: param };
-            await Employee.remove(conditions);
+            await Cart.remove(conditions);
 
             return helpers.success(res);
-        }
-        catch (error) {
+        } catch (error) {
             return helpers.error(res, error);
         }
     }
 
     // Checks if a manager with given id exists
-    async validateManager (managerId) {
+    async validateManager(managerId) {
         if (managerId === null) {
             return true;
         }
 
         try {
-            const managerExists = await Employee.get({ _id: managerId, isManager: true });
+            const managerExists = await Employee.get({_id: managerId, isManager: true});
             return !!(managerExists);
-        }
-        catch (e) {
+        } catch (e) {
             return false;
         }
     }
 
     // Checks if all the peers exist in database
-    async validatePeers (peers, isManager) {
-        if (peers === null) {
+    async validateEmployees(employeeIds) {
+        if (!(employeeIds instanceof Array)) {
+            employeeIds = [employeeIds];
+        }
+
+        if (employeeIds.length === 0) {
             return true;
         }
 
-        if (peers.length && !isManager) {
-            return false;
-        }
-
         try {
-            const peersExists = await Employee.getAll({ _id: {$in: peers} }, { _id: 1 });
-            return (peersExists.length === peers.length) ;
-        }
-        catch (e) {
+            const employeesExists = await Employee.getAll({_id: {$in: employeeIds}}, {_id: 1});
+            return (employeesExists.length === employeeIds.length);
+        } catch (e) {
             return false;
         }
     }

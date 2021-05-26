@@ -1,0 +1,30 @@
+.cart-item-container {
+    padding: 0px;
+    margin: 10px 0px;
+    overflow-x: auto;
+}
+
+.cart-item-container img {
+    height: 100px;
+}
+
+.cart-item-container table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.cart-item-container th, td {
+    text-align: left;
+    padding: 8px;
+}
+.cart-item-container button {
+    margin: 10px;
+    padding: 10px
+}
+.cart-item-container span {
+    margin: 20px 5px;
+}
+
+.cart-item-container tr:nth-child(even){background-color: #f2f2f2}

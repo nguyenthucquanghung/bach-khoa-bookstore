@@ -20,6 +20,8 @@ module.exports.error = (res, error = 'An unknown error occurred', statusCode = 5
     }, null, 4));
 };
 
+module.exports.change
+
 module.exports.unauthorized = (res, error = 'Unauthorized', statusCode = 401) => {
     addHeaders(res);
     res.statusCode = statusCode;

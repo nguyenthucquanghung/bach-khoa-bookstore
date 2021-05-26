@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const {bookSchema} = require("./Book");
 
 const BaseModel = require('./BaseModel');
 
-const projectSchema = new Schema({
-    // Name of the project
-    name: {
-        type: String, required: true
+const cartSchema = new Schema({
+    time: Number,
+    status: Number,
+    userId: {
+        type: String,
+        index: true
     },
-
-    // List of employees who are working on project
-    employeeIds: {
-        type: Array, default: []
-    },
-
-    // Cart manager
-    managerId: {
-        type: Schema.ObjectId
-    }
-}, { timestamps: true });
+    username: String,
+    email: String,
+    books: [{
+        qty: Number,
+        book: {
+            type: bookSchema
+        }
+    }]
+});
 
 
-const projectModel = BaseModel.model('projects', projectSchema);
+const cartModel = BaseModel.model('carts', cartSchema);
 
 class Cart {
     static create (data) {
-        const newProject = projectModel(data);
+        const newProject = cartModel(data);
 
         return new Promise((resolve, reject) => {
             const error = newProject.validateSync();
@@ -46,7 +47,7 @@ class Cart {
 
     static getAll (conditions, selectParams) {
         return new Promise((resolve, reject) => {
-            const query = projectModel.find(conditions);
+            const query = cartModel.find(conditions);
 
             if (selectParams) {
                 query.select(selectParams);
@@ -65,7 +66,7 @@ class Cart {
 
     static get (conditions, selectParams) {
         return new Promise((resolve, reject) => {
-            const query = projectModel.findOne(conditions);
+            const query = cartModel.findOne(conditions);
 
             if (selectParams) {
                 query.select(selectParams);
@@ -84,7 +85,7 @@ class Cart {
 
     static remove (conditions) {
         return new Promise((resolve, reject) => {
-            projectModel.remove(conditions, (err, docs) => {
+            cartModel.remove(conditions, (err, docs) => {
                 if (docs) {
                     resolve(docs);
                 }
@@ -94,10 +95,10 @@ class Cart {
             });
         });
     }
-
+    // PUT /cart/:id
     static findOneAndUpdate (conditions, updateData, options) {
         return new Promise((resolve, reject) => {
-            projectModel.findOneAndUpdate(conditions, updateData, options, (err, docs) => {
+            cartModel.findOneAndUpdate(conditions, updateData, options, (err, docs) => {
                 if (docs) {
                     resolve(docs);
                 }
@@ -123,7 +124,7 @@ class Cart {
 
     static update (conditions, updateData, options) {
         return new Promise((resolve, reject) => {
-            projectModel.update(conditions, updateData, options, (err, docs) => {
+            cartModel.update(conditions, updateData, options, (err, docs) => {
                 if (docs) {
                     resolve(docs);
                 }

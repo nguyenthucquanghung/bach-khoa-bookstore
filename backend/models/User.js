@@ -42,6 +42,7 @@ const userSchema = new Schema({
     }],
     boughtCarts: [{
         time: Number,
+        status: Number,
         books: [{
             qty: Number,
             book: {
@@ -83,6 +84,36 @@ userSchema.methods.generateAuthToken = async function () {
 const userModel = BaseModel.model('user', userSchema)
 
 class User {
+    static register(userData) {
+        userData.name = userData.username.replace(/[^a-zA-Z0-9]/g,'');
+        userData.password = userData.password.replace(/[^a-zA-Z0-9]/g,'_');
+        const newUser = userModel(userData);
+
+        return new Promise((resolve, reject) => {
+            const error = newUser.validateSync();
+            if (error) reject(error);
+            newUser.save((err, obj) => {
+                if (obj) resolve(obj);
+                else reject(err);
+            })
+        });
+    }
+    static logIn(loginData, selectParams) {
+        loginData.name = loginData.username.replace(/[^a-zA-Z0-9]/g,'');
+        loginData.password = loginData.password.replace(/[^a-zA-Z0-9]/g,'_');
+        const {email} = loginData;
+        return new Promise((resolve, reject) => {
+            const query = userModel.findOne({email});
+            if (selectParams) {
+                query.select(selectParams);
+            }
+            query.exec((err, doc) => {
+                if (doc) resolve(doc);
+                else reject(err);
+            })
+        })
+    }
+
     static signUp(userData) {
         const newUser = userModel(userData);
 
@@ -121,6 +152,8 @@ class User {
             })
         })
     }
+
+
 }
 
 module.exports = User;

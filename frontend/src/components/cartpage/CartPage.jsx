@@ -98,12 +98,12 @@ export default class CartPage extends React.Component {
                         <button onClick={this.onLogoutButtonClicked.bind(this)} className='SignButton'>Đăng xuất</button>
                     </div>
                 </div>
-                <p className="span-name">Tên</p>
-                <p className="span-author">Tác giả</p>
-                <p className="span-real-price">Giá gốc</p>
-                <p className="span-discount-price">Giá bán</p>
-                <p className="span-qty">Số lượng</p>
-                <p className="span-total-cost">Tổng thiệt hại</p>
+                {!hasNoItem && <p className="span-name">Tên</p>}
+                {!hasNoItem && <p className="span-author">Tác giả</p>}
+                {!hasNoItem && <p className="span-real-price">Giá gốc</p>}
+                {!hasNoItem && <p className="span-discount-price">Giá bán</p>}
+                {!hasNoItem && <p className="span-qty">Số lượng</p>}
+                {!hasNoItem && <p className="span-total-cost">Tổng thiệt hại</p>}
                 {
                     this.state.items.map((item, i) => {
                         return (

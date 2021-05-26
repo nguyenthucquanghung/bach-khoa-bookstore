@@ -106,7 +106,7 @@ ul {
 
 .NavigationPanel {
 	width: 14%;
-	height: 100%;
+	height: max-content;
 	display: inline-block;
 	vertical-align: top;
 	flex-direction: column;
@@ -434,6 +434,7 @@ header {
 	width: max-content;
 	padding: 0px 20px;
 }
+
 
 .SignButton:hover {
 	cursor: pointer;

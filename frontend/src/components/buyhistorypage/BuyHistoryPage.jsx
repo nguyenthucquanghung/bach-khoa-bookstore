@@ -1,11 +1,13 @@
 import "./BuyHistoryPage.css";
 import * as React from "react";
 import OldCart from "./OldCart";
+import CartItem from "./../common/cartitem/CartItem";
 
 export default class BuyHistoryPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            cartList: [],
             userData: {},
             username: "",
             token: "",
@@ -28,6 +30,17 @@ export default class BuyHistoryPage extends React.Component {
         const noOfItemsInCart = localStorage.getItem("cartqty");
         if (token && username && noOfItemsInCart) {
             this.setState({ username: username, token: token });
+        }
+
+        const cartUrl = `http://localhost:3000/cart/user`;
+        const res = await fetch(cartUrl, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+        if (res.status===200) {
+            const resBody = await res.json();
+            this.setState({ cartList: resBody.data });
         }
     }
 
@@ -69,7 +82,8 @@ export default class BuyHistoryPage extends React.Component {
                         <button onClick={this.onLogoutButtonClicked.bind(this)} className='SignButton'>Đăng xuất</button>
                     </div>
                 </div>
-                {userData.boughtCarts && userData.boughtCarts.map((item, i) => <OldCart key={i} cartData={item} />)}
+                {/* {this.state.cartList && this.state.cartList.map((item, i) => <OldCart key={i} cartData={item} />)} */}
+                {this.state.cartList && this.state.cartList.slice(0).reverse().map((cartItem) => <CartItem data={cartItem} isAdmin={false}/>)}
             </div>
         )
     }

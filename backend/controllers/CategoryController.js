@@ -1,65 +1,73 @@
+const mongoose = require('mongoose');
+const Employee = require('../models/Category');
 const Project = require('../models/Cart');
 const helpers = require('./../common/helpers');
-const Employee = require('../models/Category');
 
-const mongoose = require('mongoose');
-
-class CategoryController {
-    // GET /project
+class CartController {
+    // GET /employee
     async index (req, res) {
         try {
             const selectParams = {
                 _id: 1,
                 name: 1,
-                managerId: 1,
-                employeeIds: 1
+                email: 1
             };
 
-            const projects = await Project.getAll({}, selectParams);
+            const employees = await Employee.getAll({}, selectParams);
 
-            return helpers.success(res, projects);
+            return helpers.success(res, employees);
         }
         catch (error) {
             return helpers.error(res, error);
         }
     }
 
-    // POST /project
+    // POST /employee
     async create (req, res, param, postData) {
         postData = JSON.parse(postData);
-
-        let { name, employeeIds = [], managerId = null } = postData;
-
-        if (! (employeeIds instanceof Array)) {
-            employeeIds = [employeeIds];
-        }
+        let { name, email, isManager = false, managerId = null, peers = [] } = postData;
 
         try {
             let manageExists = await this.validateManager(managerId);
 
             if (!manageExists) {
-                return helpers.validationError(res, 'Manager is invalid');
+                return helpers.validationError(res, 'managerId is invalid');
             }
-
-            let employeesExists = await this.validateEmployees(employeeIds);
-
-            if (!employeesExists) {
-                return helpers.validationError(res, 'Employee(s) is invalid');
-            }
-
-            employeeIds = employeeIds.map(element => { return mongoose.Types.ObjectId(element) });
 
             if (managerId !== null) {
                 managerId = mongoose.Types.ObjectId(managerId);
             }
 
-            const project = await Project.create({ name, employeeIds, managerId });
+            if (! (peers instanceof Array)) {
+                peers = [peers];
+            }
 
-            return helpers.success(res, project);
+            let peersExists = await this.validatePeers(peers, isManager);
+
+            if (!peersExists) {
+                return helpers.validationError(res, 'Peer(s) is invalid');
+            }
+
+            if (peers.length > 0) {
+                peers = peers.map((el) => { return mongoose.Types.ObjectId(el); });
+            }
+
+            const employee = await Employee.create({ name, email, isManager, managerId, peers });
+
+            // set managerId of all peers
+            if (employee.peers.length > 0) {
+                const update = {$set: {managerId: mongoose.Types.ObjectId(employee._id)}};
+                await Employee.update({_id: {$in: employee.peers}}, update, {multi: true});
+            }
+
+            return helpers.success(res, employee.toClient());
         }
         catch (error) {
             if (error.name === 'ValidationError') {
                 return helpers.validationError(res, error);
+            }
+            else if (error.message.indexOf('duplicate key error') !== -1) {
+                return helpers.validationError(res, 'Email already exists');
             }
             else {
                 return helpers.error(res);
@@ -67,13 +75,22 @@ class CategoryController {
         }
     }
 
-    // GET /project/:id
+    // GET /employee/:id
     async show (req, res, param) {
         try {
-            const aggPipeline = [
+            const pipeline = [
                 {
                     "$match" : {
                         "_id" : mongoose.Types.ObjectId(param)
+                    }
+                },
+                {
+                    "$project" : {
+                        "_id" : 1,
+                        "isManager" : 1,
+                        "name" : 1,
+                        "email" : 1,
+                        "managerId" : 1
                     }
                 },
                 {
@@ -85,66 +102,82 @@ class CategoryController {
                     }
                 },
                 {
+                    "$project" : {
+                        "manager" : {
+                            "isManager" : 0,
+                            "peers" : 0,
+                            "managerid" : 0,
+                            "createdAt" : 0,
+                            "updatedAt" : 0,
+                            "__v" : 0
+                        },
+                        "managerId" : 0
+                    }
+                },
+                {
                     "$lookup" : {
-                        "from" : "employees",
-                        "localField" : "employeeIds",
-                        "foreignField" : "_id",
-                        "as" : "employees"
+                        "from" : "projects",
+                        "localField" : "_id",
+                        "foreignField" : "employeeIds",
+                        "as" : "projects"
                     }
                 },
                 {
                     "$project" : {
-                        "_id" : 1,
-                        "name" : 1,
-                        "manager" : {
-                            "_id" : 1,
-                            "name" : 1
-                        },
-                        "employees" : {
-                            "_id" : 1,
-                            "name" : 1
+                        "projects" : {
+                            "employeeIds" : 0,
+                            "managerId" : 0,
+                            "createdAt" : 0,
+                            "updatedAt" : 0,
+                            "__v" : 0
                         }
                     }
                 }
             ];
 
-            const project = await Project.aggregation(aggPipeline);
+            const employee = await Employee.aggregation(pipeline);
 
-            return helpers.success(res, project);
+            return helpers.success(res, employee);
         }
         catch (error) {
             return helpers.error(res, error);
         }
     }
 
-    // PUT /project/:id
+    // PUT /employee/:id
     async update (req, res, param, postData) {
-        param = mongoose.Types.ObjectId(param);
+        let employee;
 
-        let project;
         try {
-            project = await Project.get({ _id: param }, { _id: 1 });
+            employee = await Employee.get({ _id: param }, { isManager: 1 });
         }
         catch (e) {
             console.log(e);
         }
 
-        if (!project) {
+        if (!employee) {
             return helpers.error(res, 'Entity not found', 404);
         }
 
-        let updateData = {};
         postData = JSON.parse(postData);
+
+        let updateData = {
+            isManager: employee.isManager
+        };
 
         if (postData.name) {
             updateData.name = postData.name;
         }
 
-        let { managerId = null, employeeIds = [] } = postData;
-
-        if (! (employeeIds instanceof Array)) {
-            employeeIds = [employeeIds];
+        if (postData.email) {
+            updateData.email = postData.email;
         }
+
+        if (postData.isManager) {
+            updateData.isManager = true;
+        }
+
+        let { managerId = null, peers = null } = postData;
 
         try {
             let manageExists = await this.validateManager(managerId);
@@ -157,37 +190,44 @@ class CategoryController {
                 updateData.managerId = mongoose.Types.ObjectId(managerId);
             }
 
-            let employeesExists = await this.validateEmployees(employeeIds);
-
-            if (!employeesExists) {
-                return helpers.validationError(res, 'EmployeeIds is invalid');
+            if (peers !== null && ! (peers instanceof Array)) {
+                peers = [peers];
             }
 
-            employeeIds = employeeIds.map(element => { return mongoose.Types.ObjectId(element) });
+            let peersExists = await this.validatePeers(peers, updateData.isManager);
 
-            if (employeeIds.length > 0) {
-                updateData.employeeIds = employeeIds;
+            if (!peersExists) {
+                return helpers.validationError(res, 'Peer(s) is invalid');
             }
 
-            const options = {
-                fields: {
-                    name: 1,
-                    employeeIds: 1,
-                    managerId: 1
-                },
-                new: true
-            };
+            if (peers && peers.length > 0) {
+                peers = peers.map((el) => { return mongoose.Types.ObjectId(el); });
+            }
 
-            const project = await Project.findOneAndUpdate({ _id: param }, {$set: updateData}, options);
+            if (peers !== null) {
+                updateData.peers = peers;
+            }
 
-            return helpers.success(res, project);
+            const employee = await Employee.findOneAndUpdate({ _id: param }, { $set: updateData }, { new: true });
+
+            // set managerId of all peers
+            if (employee.peers.length > 0) {
+                const update = {$set: {managerId: mongoose.Types.ObjectId(employee._id)}};
+                await Employee.update({ _id: {$in: employee.peers} }, update, { multi: true });
+            }
+
+            return helpers.success(res, employee.toClient());
         }
         catch (error) {
+            console.log(error);
+
             if (error.name === 'ValidationError') {
                 return helpers.validationError(res, error);
             }
+            else if (error.message.indexOf('duplicate key error') !== -1) {
+                return helpers.validationError(res, 'Email already exists');
+            }
             else {
-                console.log(error);
                 return helpers.error(res);
             }
         }
@@ -195,24 +235,60 @@ class CategoryController {
 
     // DELETE /employee/:id
     async delete (req, res, param) {
-        param = mongoose.Types.ObjectId(param);
-
-        let project;
+        let employee;
         try {
-            project = await Project.get({ _id: param }, { _id: 1 });
+            employee = await Employee.get({ _id: param }, { isManager: 1 });
         }
         catch (e) {
             console.log(e);
         }
 
-        if (!project) {
+        if (!employee) {
             return helpers.error(res, 'Entity not found', 404);
         }
 
         try {
-            let conditions = { _id: param };
+            let update, conditions;
 
-            await Project.remove(conditions);
+            // delete employee from project
+            try {
+                update = { $pull: { employeeIds: mongoose.Types.ObjectId(param) } };
+                await Project.update({}, update, {multi: true});
+            }
+            catch (e) {
+                console.log('Error in delete employee from project', e);
+            }
+
+            // delete managerId from project
+            try {
+                update = { $set: { managerId: null } };
+                await Project.update({managerId: mongoose.Types.ObjectId(param)}, update, {multi: true});
+            }
+            catch (e) {
+                console.log('Error in delete employee from project', e);
+            }
+
+            // delete peers
+            try {
+                update = { $pull: { peers: mongoose.Types.ObjectId(param) } };
+                await Employee.update({}, update, {multi: true});
+            }
+            catch (e) {
+                console.log('delete peers', e);
+            }
+
+            // set manager to null
+            try {
+                conditions = {managerId: mongoose.Types.ObjectId(param)};
+                update = { $set: { managerId: null } };
+                await Employee.update(conditions, update, {multi: true});
+            }
+            catch (e) {
+                console.log('set manager to null', e);
+            }
+
+            conditions = { _id: param };
+            await Employee.remove(conditions);
 
             return helpers.success(res);
         }
@@ -237,18 +313,18 @@ class CategoryController {
     }
 
     // Checks if all the peers exist in database
-    async validateEmployees (employeeIds) {
-        if (! (employeeIds instanceof Array)) {
-            employeeIds = [employeeIds];
-        }
-
-        if (employeeIds.length === 0) {
+    async validatePeers (peers, isManager) {
+        if (peers === null) {
             return true;
         }
 
+        if (peers.length && !isManager) {
+            return false;
+        }
+
         try {
-            const employeesExists = await Employee.getAll({ _id: {$in: employeeIds} }, {_id: 1});
-            return (employeesExists.length === employeeIds.length) ;
+            const peersExists = await Employee.getAll({ _id: {$in: peers} }, { _id: 1 });
+            return (peersExists.length === peers.length) ;
         }
         catch (e) {
             return false;
@@ -256,4 +332,4 @@ class CategoryController {
     }
 }
 
-module.exports = new CategoryController();
+module.exports = new CartController();

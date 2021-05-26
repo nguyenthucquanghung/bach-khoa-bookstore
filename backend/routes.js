@@ -4,12 +4,27 @@
  * 2. If "path" is a object, then we assume it is a RegEx and use RegEx matching
  */
 
-const cartController = require('./controllers/CartController');
-const bookController = require('./controllers/BookController');
 const categoryController = require('./controllers/CategoryController');
+const bookController = require('./controllers/BookController');
+const cartController = require('./controllers/CartController');
 const userController = require('./controllers/UserController');
 
 const routes = [
+    {
+        method: 'PUT',
+        path: /\/admin\/cart\/([0-9a-z]+)/,
+        handler: cartController.update.bind(cartController)
+    },
+    {
+        method: 'GET',
+        path: '/admin/cart',
+        handler: cartController.index.bind(cartController)
+    },
+    {
+        method: 'GET',
+        path: '/cart/user',
+        handler: cartController.getByUser.bind(cartController)
+    },
     {
         method: 'POST',
         path: '/user',
@@ -68,52 +83,42 @@ const routes = [
     {
         method: 'GET',
         path: '/employee',
-        handler: cartController.index.bind(cartController)
-    },
-    {
-        method: 'GET',
-        path: /\/employee\/([0-9a-z]+)/,
-        handler: cartController.show.bind(cartController)
-    },
-    {
-        method: 'POST',
-        path: '/employee',
-        handler: cartController.create.bind(cartController)
-    },
-    {
-        method: 'PUT',
-        path: /\/employee\/([0-9a-z]+)/,
-        handler: cartController.update.bind(cartController)
-    },
-    {
-        method: 'DELETE',
-        path: /\/employee\/([0-9a-z]+)/,
-        handler: cartController.delete.bind(cartController)
-    },
-    {
-        method: 'POST',
-        path: '/project',
-        handler: categoryController.create.bind(categoryController)
-    },
-    {
-        method: 'GET',
-        path: '/project',
         handler: categoryController.index.bind(categoryController)
     },
     {
         method: 'GET',
-        path: /\/project\/([0-9a-z]+)/,
+        path: /\/employee\/([0-9a-z]+)/,
         handler: categoryController.show.bind(categoryController)
     },
     {
+        method: 'POST',
+        path: '/employee',
+        handler: categoryController.create.bind(categoryController)
+    },
+    {
         method: 'PUT',
-        path: /\/project\/([0-9a-z]+)/,
+        path: /\/employee\/([0-9a-z]+)/,
         handler: categoryController.update.bind(categoryController)
     },
     {
         method: 'DELETE',
-        path: /\/project\/([0-9a-z]+)/,
+        path: /\/employee\/([0-9a-z]+)/,
         handler: categoryController.delete.bind(categoryController)
+    },
+    {
+        method: 'POST',
+        path: '/project',
+        handler: cartController.create.bind(cartController)
+    },
+    {
+        method: 'GET',
+        path: /\/project\/([0-9a-z]+)/,
+        handler: cartController.show.bind(cartController)
+    },
+    {
+        method: 'DELETE',
+        path: /\/project\/([0-9a-z]+)/,
+        handler: cartController.delete.bind(cartController)
     },
 ];
 
