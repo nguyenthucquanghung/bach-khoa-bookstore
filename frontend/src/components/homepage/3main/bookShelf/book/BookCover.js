@@ -3,7 +3,7 @@ import './bookStyle.css';
 
 class BookCover extends Component{
   render() {
-    return (
+    return(
       <div className='BookCover'>
         <img src={this.props.img} />
       </div>

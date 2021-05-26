@@ -5,7 +5,7 @@ import Pagination from "react-js-pagination";
 import NavigationPanel from "./NavigationPanel";
 import { withRouter } from 'react-router-dom';
 
-class BookShelf extends Component {
+class BookShelf extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
