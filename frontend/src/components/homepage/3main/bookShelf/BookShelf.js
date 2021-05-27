@@ -3,11 +3,13 @@ import '../main.css';
 import Books from './Books';
 import Pagination from "react-js-pagination";
 import NavigationPanel from "./NavigationPanel";
+import SeachButton from './SearchButton';
 
 class BookShelf extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
+			searchText: "",
 			categoryId: 316,
 			loading: true,
 			books: null,
@@ -42,10 +44,20 @@ class BookShelf extends Component{
 		const data = await response.json();
 		this.setState({ books: data.data, loading: false });
 	}
+
+	onSearchTextChange(content) {
+		this.setState({})
+	}
+
 	render() {
 		const { activePage, pageSize, noOfBooks } = this.state;
 		return (
 			<div className='BookShelf'>
+				<div className='SearchBar'>
+					
+					<input type='text' onChange={this.onSearchTextChange.bind(this)} placeholder="Seach books" />
+					<SeachButton />
+				</div>
 				<NavigationPanel onCategoryChange={this.onCategoryChange.bind(this)} activeCatId={this.state.categoryId} />
 				{!this.state.loading && <Books books={this.state.books} />}
 				<Pagination

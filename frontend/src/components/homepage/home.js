@@ -7,7 +7,7 @@ class home extends Component {
     render() {
       return (
           <div>
-             <Header></Header>
+             {/* <Header></Header> */}
              {/* <Carousel></Carousel> */}
              <Main></Main>
           </div>

@@ -139,19 +139,37 @@ ul {
 .CategoryButton {
     background-color: #FAFAFA;
     color: #78909C;
-    float: left;
+    /* float: left; */
     border: none;
-    outline: none;
+    /* outline: none; */
     cursor: pointer;
-    padding: 14px 16px;
-    font-size: 17px;
-    flex: 1;
-    height: 100%;
+    /* padding: 14px 16px; */
+    font-size: 16px;
+    -ms-flex: 1 1 0%;
+    /* flex: 1 1 0%; */
+    /* height: 100%; */
+    padding: 11px;
+    /* text-align: center; */
+    text-align: left;
+    padding-left: 30px;
+    background-color: #fff;
+    margin-bottom: 5px;
+    color: #333;
+    /* border-bottom: 1px solid #888; */
 }
+
+.CategoryButton:hover {
+    background-color: #f9c433;
+    cursor: pointer;
+    padding-left: 40px;
+    font-size: 18px;
+    /* transform: scale(1.1); */
+}
+
 
 .CategoryButtonActive {
     /* border-bottom: 2px solid #0091EA; */
-    background-color: #333333;
+    background-color: #f9c433;
     color: #ffffff;
     transition: 0.3s;
 }
@@ -199,3 +217,171 @@ ul {
 .pagination li.active a{
     color: #fff;
 }
+
+header {
+    background-color: #FAFAFA;
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .BrowseCategory {
+    background-color: #FAFAFA;
+    height: inherit;
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .BrowseCategory select {
+    background-color: #FAFAFA;
+    color: #90A4AE;
+    border: 0;
+    outline:0px;
+  }
+  .BrowseCategory option {
+    background-color: #FAFAFA;
+    color: #90A4AE;
+    border: 0;
+  }
+  .SearchBook {
+    background-color: #FAFAFA;
+    font-size: 16px;
+    height: inherit;
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .iconSearch{
+    margin: 5px;
+    color: #B0BEC5;
+  }
+  .SearchBook input {
+    background-color: inherit;
+    color: #90A4AE;
+    box-sizing: border-box;
+    border: 0;
+    border-bottom: 0.5px solid #B0BEC5;
+    flex: 2;
+    width: 200px;
+    font-size: 16px;
+    margin-right: 10px;
+    -webkit-transition: margin 0.4s ease-in-out;
+    transition: margin 0.4s ease-in-out;
+  }
+  .SearchBook input:focus {  
+    margin-right: 3px;
+  }
+  .SearchBook input::-webkit-input-placeholder {
+  
+    color: #B0BEC5;
+    -webkit-transition: color 0.4s ease-in-out;
+    transition: color 0.4s ease-in-out;
+  }
+  .SearchBook input:focus::-webkit-input-placeholder {
+  
+    color: transparent;
+  }
+  .Titel {
+    background-color: #FAFAFA;
+    height: inherit;
+    flex: 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #78909C;
+  }
+  .User {
+    background-color: #FAFAFA;
+    height: inherit;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .UserPictire {
+    background-color: pink;
+    height: 8vh;
+    width: 8vh;
+    border: 1px solid #FAFAFA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .UserPictire img {
+    height: 80%;
+    vertical-align: middle;
+  }
+  
+  .Menu {
+    background-color: #FAFAFA;
+    height: inherit;
+    flex: 2;
+    color: #78909C;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-transition: color 0.4s ease-in-out;
+    transition: color 0.4s ease-in-out;
+  }
+  .iconMenu {
+    flex: 1;
+    font-size: 24px;
+  }
+  .Menu span {
+    flex: 3;
+  }
+  .Menu:hover {
+    color: #455A64;
+  }
+  
+  .SearchButton {
+    color: #0b76ac;
+  }
+
+
+    .SearchBar input[type="text"] {
+        border: none;
+        padding: 5px 12px;
+        border-bottom: 1px solid #666;
+        font-size: 16px;
+        color: #333;
+    }
+    .SearchBar {
+        display: flex;
+        padding: 15px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .SeachButton {
+        font-size: 17px;
+        background-color: #f9c433;
+        padding: 4px 15px;
+        display: inline-flex;
+        border-radius: 5px;
+        margin-left: 12px;
+        align-items: center;
+    }
+
+    .SeachButton a{
+        text-decoration: none;
+        color: #333;
+    }
+
+    .SearchBar input[type="text"] {
+        border: none;
+        padding: 5px 12px;
+        border-bottom: 1px solid #666;
+        font-size: 16px;
+        color: #333;
+        width: 20%;
+        max-width: 350px;
+    }

@@ -10,11 +10,11 @@ class Header extends Component {
   render () {
     return (
       <header>
-        <BrowseCategory></BrowseCategory>
+        {/* <BrowseCategory></BrowseCategory> */}
         <SearchBook></SearchBook>
-        <Titel></Titel>
-        <User></User>
-        <Menu></Menu>
+        {/* <Titel></Titel> */}
+        {/* <User></User> */}
+        {/* <Menu></Menu> */}
       </header>
     );
   }
