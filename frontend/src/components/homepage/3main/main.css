@@ -106,7 +106,7 @@ ul {
 }
 
 .NavigationPanel {
-    width: 20%;
+    width: 10%;
     height: 100%;
     display: inline-block;
     vertical-align: top;
@@ -177,7 +177,7 @@ ul {
 .Books {
     background-color: #FAFAFA;
     height: 100%;
-    width: 80%;
+    width: 90%;
     display: inline-block;
     flex-direction: row;
     flex-wrap: wrap;
