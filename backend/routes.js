@@ -1,13 +1,19 @@
 /**
  * We define all our routes in this file. Routes are matched using `path`.
  * 1. If "path" is a string, then we simply match with url
- * 2. If "path is a object, then we assume it is a RegEx and use RegEx matching
+ * 2. If "path" is a object, then we assume it is a RegEx and use RegEx matching
  */
 
 const employeeController = require('./controllers/EmployeeController');
+const bookController = require('./controllers/BookController');
 const projectController = require('./controllers/ProjectController');
 
 const routes = [
+    {
+        method: 'GET',
+        path: '/books',
+        handler: bookController.index.bind(bookController)
+    },
     {
         method: 'GET',
         path: '/employee',

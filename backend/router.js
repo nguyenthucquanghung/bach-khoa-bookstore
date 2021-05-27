@@ -1,7 +1,8 @@
-const { parse } = require('querystring');
 const helpers = require('./common/helpers');
+const querystring = require('querystring');
 
 module.exports = async (req, res, routes) => {
+
     // Find a matching route
     const route = routes.find((route) => {
         const methodMatch = route.method === req.method;
@@ -13,7 +14,7 @@ module.exports = async (req, res, routes) => {
         }
         else {
             // Path is a string, we simply match with URL
-            pathMatch = route.path === req.url;
+            pathMatch = route.path === req.url.split('?')[0];
         }
 
         return pathMatch && methodMatch;
@@ -26,6 +27,13 @@ module.exports = async (req, res, routes) => {
         param = req.url.match(route.path)[1];
     }
 
+    // Extract the query params
+    let params = {}
+    if (route && req.url.includes('?')) {
+        [, queryString] = req.url.split('?');
+        params = querystring.parse(queryString);
+    }
+
     // Extract request body
     if (route) {
         let body = null;
@@ -33,7 +41,7 @@ module.exports = async (req, res, routes) => {
             body = await getPostData(req);
         }
 
-        return route.handler(req, res, param, body);
+        return route.handler(req, res, param, body, params);
     }
     else {
         return helpers.error(res, 'Endpoint not found', 404);

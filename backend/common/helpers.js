@@ -20,14 +20,15 @@ module.exports.error = (res, error = 'An unknown error occurred', statusCode = 5
     }, null, 3));
 };
 
-module.exports.success = (res, data = null) => {
+module.exports.success = (res, data = null, meta = null) => {
     addHeaders(res);
 
     res.statusCode = 200;
 
     res.end(JSON.stringify({
         status: 'success',
-        data
+        data,
+        meta
     }, null, 3));
 };
 

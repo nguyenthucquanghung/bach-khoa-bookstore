@@ -8,7 +8,7 @@ class home extends Component {
       return (
           <div>
              <Header></Header>
-             <Carousel></Carousel>
+             {/* <Carousel></Carousel> */}
              <Main></Main>
           </div>
       );

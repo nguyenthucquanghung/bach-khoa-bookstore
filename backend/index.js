@@ -2,8 +2,8 @@ const http = require('http');
 
 const routes = require('./routes');
 const router = require('./router');
-
-process.on('uncaughtException', function(err) {
+const cors = require("cors")
+process.on('uncaughtException', function (err) {
     // handle the error safely
     console.log('uncaughtException');
     console.error(err.stack);
@@ -12,8 +12,9 @@ process.on('uncaughtException', function(err) {
 
 
 const server = http.createServer(async (req, res) => {
-    await router(req, res, routes);
-});
+        await router(req, res, routes);
+    }
+);
 
 server.listen(3000, () => {
     console.log('Server is listening on port 3000');
