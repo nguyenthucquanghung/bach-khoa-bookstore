@@ -6,7 +6,7 @@ class NavBar extends Component {
 		currentCategory: 0,
 	}
 
-	onCategorySelect = (category) => {
+	onCategorySelect = (category) =>{
 		this.props.onCategorySelect(category);
 	}
 	render() {

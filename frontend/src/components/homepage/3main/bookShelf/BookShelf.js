@@ -4,7 +4,7 @@ import Books from './Books';
 import Pagination from "react-js-pagination";
 import NavigationPanel from "./NavigationPanel";
 
-class BookShelf extends Component {
+class BookShelf extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {

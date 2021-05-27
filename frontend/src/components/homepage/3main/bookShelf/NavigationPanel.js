@@ -4,7 +4,7 @@ import PopularBy from './PopularBy';
 import NavBar from './NavBar';
 
 class NavigationPanel extends Component {
-    onCategorySelect = (category) => {
+    onCategorySelect = (category) =>{
         this.props.onCategoryChange(category);
     }
     render() {

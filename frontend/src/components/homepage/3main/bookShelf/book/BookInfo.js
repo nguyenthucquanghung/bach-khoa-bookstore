@@ -3,7 +3,7 @@ import './bookStyle.css';
 import SeeBook from '../../../2carousel/BookCard/SeeBook';
 
 class BookInfo extends Component{
-  render() {
+  render(){
     return (
       <div className='BookInfo'>
         <h1>{this.props.name}</h1>

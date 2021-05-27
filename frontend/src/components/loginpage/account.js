@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 class account extends Component {
     render() {
         return(
-            <div className = 'Login'>
+            <div className='Login'>
                 <h1>Login</h1>
                 Username: <input name = "username" type = "text" /> <br/>
                 Password:  <input name = "pass" type = "password" /> <br/>

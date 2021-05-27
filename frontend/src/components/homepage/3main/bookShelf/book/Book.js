@@ -14,7 +14,6 @@ class Book extends Component{
       <div className='Book'>
         <BookCover img={this.props.img}></BookCover>
         <BookInfo name={this.props.name} author={this.props.author} price={this.props.price} description={this.props.description}></BookInfo>
-
       </div>
     );
   }
