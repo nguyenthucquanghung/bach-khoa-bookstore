@@ -6,7 +6,7 @@ class testAPI extends Component {
     loading: true,
     bookInfo: null,
   }
-
+   
   async componentDidMount() {
     const url = "https://my-json-server.typicode.com/ntquang1999/fakeAPI/db";
     const response = await fetch(url);
