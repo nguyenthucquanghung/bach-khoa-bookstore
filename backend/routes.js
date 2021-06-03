@@ -4,9 +4,9 @@
  * 2. If "path" is a object, then we assume it is a RegEx and use RegEx matching
  */
 
-const employeeController = require('./controllers/CartController');
+const cartController = require('./controllers/CartController');
 const bookController = require('./controllers/BookController');
-const projectController = require('./controllers/CategoryController');
+const categoryController = require('./controllers/CategoryController');
 const userController = require('./controllers/UserController');
 
 const routes = [
@@ -68,52 +68,52 @@ const routes = [
     {
         method: 'GET',
         path: '/employee',
-        handler: employeeController.index.bind(employeeController)
+        handler: cartController.index.bind(cartController)
     },
     {
         method: 'GET',
         path: /\/employee\/([0-9a-z]+)/,
-        handler: employeeController.show.bind(employeeController)
+        handler: cartController.show.bind(cartController)
     },
     {
         method: 'POST',
         path: '/employee',
-        handler: employeeController.create.bind(employeeController)
+        handler: cartController.create.bind(cartController)
     },
     {
         method: 'PUT',
         path: /\/employee\/([0-9a-z]+)/,
-        handler: employeeController.update.bind(employeeController)
+        handler: cartController.update.bind(cartController)
     },
     {
         method: 'DELETE',
         path: /\/employee\/([0-9a-z]+)/,
-        handler: employeeController.delete.bind(employeeController)
+        handler: cartController.delete.bind(cartController)
     },
     {
         method: 'POST',
         path: '/project',
-        handler: projectController.create.bind(projectController)
+        handler: categoryController.create.bind(categoryController)
     },
     {
         method: 'GET',
         path: '/project',
-        handler: projectController.index.bind(projectController)
+        handler: categoryController.index.bind(categoryController)
     },
     {
         method: 'GET',
         path: /\/project\/([0-9a-z]+)/,
-        handler: projectController.show.bind(projectController)
+        handler: categoryController.show.bind(categoryController)
     },
     {
         method: 'PUT',
         path: /\/project\/([0-9a-z]+)/,
-        handler: projectController.update.bind(projectController)
+        handler: categoryController.update.bind(categoryController)
     },
     {
         method: 'DELETE',
         path: /\/project\/([0-9a-z]+)/,
-        handler: projectController.delete.bind(projectController)
+        handler: categoryController.delete.bind(categoryController)
     },
 ];
 
