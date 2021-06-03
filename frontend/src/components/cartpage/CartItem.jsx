@@ -67,11 +67,14 @@ export default class CartItem extends React.Component {
             },
         });
         if (response.status === 200) {
+            
             const curQty = this.state.qty;
             this.setState({ qty: this.state.qty - 1 });
             const currentQty = parseInt(localStorage.getItem('cartqty'))
             localStorage.setItem('cartqty', currentQty - 1);
+            this.props.reduceTotal(this.props.discountPrice)
             if (curQty === 1) { window.location.reload(); }
+            
         } else {
             alert("Error!");
         }
@@ -92,6 +95,7 @@ export default class CartItem extends React.Component {
             this.setState({ qty: this.state.qty + 1 });
             const currentQty = parseInt(localStorage.getItem('cartqty'))
             localStorage.setItem('cartqty', currentQty + 1);
+            this.props.addTotal(this.props.discountPrice)
         } else {
             alert("Error!");
         }

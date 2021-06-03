@@ -14,11 +14,11 @@ export default class LoginPage extends React.Component {
         const { email, password } = this.state;
         return (
             <div className="login-page-container">
-                <p>Đăng nhập</p>
-                <p>Email</p>
+                <p className="login-title">Đăng nhập</p>
+                <p className="email">Email</p>
                 <input value={email} onChange={(e) => this.setState({ email: e.target.value })} />
-                <p>Mật khẩu</p>
-                <input value={password} onChange={(e) => this.setState({ password: e.target.value })} />
+                <p className="password">Mật khẩu</p>
+                <input type="password" value={password} onChange={(e) => this.setState({ password: e.target.value })} />
                 <button onClick={this.onLogInButtonClick.bind(this)}>Đăng nhập</button>
                 <a href="/register">Đăng kí tài khoản</a>
             </div>

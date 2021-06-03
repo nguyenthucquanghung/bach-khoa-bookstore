@@ -1,33 +1,25 @@
-.cart-item-container p {
+.book-item-container p {
     vertical-align: top;
-    border-left: gainsboro 1px solid;
     display: inline-block;
 }
 
-.cart-item-container {
-    border: gainsboro solid 1px;
-    text-align: center;
+.book-item-container {
+    margin-top: 10px;
+    border-top: gray 1px solid;
 }
 
-.cart-item-container button {
+.book-item-container button {
     display: inline;
     margin: 75px 5px;
 }
 
-.cart-item-container .minus-button {
-    margin-left: 100px;
-}
-.cart-item-container .plus-button {
-    margin-right: 100px;
-}
-
-.cart-item-container .book-detail{
+.book-item-container .book-detail{
     vertical-align: top;
     height: 180px;
     display: inline-block;
     text-align: center;
 }
-.cart-item-container .thumbnail {
+.book-item-container .thumbnail {
     height: 180px;
 }
 

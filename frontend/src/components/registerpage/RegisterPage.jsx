@@ -16,14 +16,14 @@ export default class RegisterPage extends React.Component {
         const { name, email, password, confirmPassword } = this.state;
         return (
             <div className="register-page-container">
-                <p>Đăng kí tài khoản</p>
-                <p>Họ và tên </p>
+                <p className="register-title">Đăng kí tài khoản</p>
+                <p className="default">Họ và tên </p>
                 <input value={name} onChange={(e) => this.setState({ name: e.target.value })} />
-                <p>Email</p>
+                <p className="default"> Email</p>
                 <input value={email} onChange={(e) => this.setState({ email: e.target.value })} />
-                <p>Mật khẩu</p>
+                <p className="default">Mật khẩu</p>
                 <input value={password} type="password" onChange={(e) => this.setState({ password: e.target.value })} />
-                <p>Nhập lại mật khẩu</p>
+                <p className="default">Nhập lại mật khẩu</p>
                 <input value={confirmPassword} type="password" onChange={(e) => this.setState({ confirmPassword: e.target.value })} />
                 <button onClick={this.onRegisterButtonClick.bind(this)}>Đăng kí</button>
                 <a href="/login">Đã có tài khoản? Đăng nhập</a>

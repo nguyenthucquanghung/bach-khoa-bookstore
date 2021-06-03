@@ -105,7 +105,7 @@ ul {
 }
 
 .NavigationPanel {
-	width: 10%;
+	width: 14%;
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
@@ -174,8 +174,8 @@ ul {
 
 .Books {
 	background-color: #FAFAFA;
-	height: 100%;
-	width: 90%;
+	height: max-content;
+	width: 86%;
 	display: inline-block;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -202,6 +202,10 @@ ul {
 	background-color: #fff;
 	box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%);
 	margin: 5px;
+}
+
+.pagination li:hover {
+	cursor: pointer;
 }
 
 .pagination li a {
@@ -378,7 +382,6 @@ header {
 
 .SeachButton {
 	margin-top: 10px;
-
 	height: 50px;
 	font-size: 17px;
 	background-color: #f9c433;
@@ -387,6 +390,10 @@ header {
 	border-radius: 5px;
 	margin-left: 12px;
 	align-items: center;
+}
+
+.SeachButton:hover {
+	cursor: pointer;
 }
 
 .SeachButton a {
@@ -402,8 +409,8 @@ header {
 	color: #333;
 	width: 20%;
 	max-width: 350px;
-
 }
+
 .SearchBar .Sign {
 	margin-top: 10px;
 	position: absolute;
@@ -414,6 +421,7 @@ header {
 	display: block;
 	height: 50px;
 }
+
 .SignButton {
 	height: 50px;
 	vertical-align: top;
@@ -427,12 +435,20 @@ header {
 	padding: 0px 20px;
 }
 
+.SignButton:hover {
+	cursor: pointer;
+	font-size: 16px;
+	height: 55px;
+	border-radius: 5px;
+}
+
 .UserNameBox {
 	vertical-align: top;
 	height: 40px;
 	display: inline-block;
 	text-align: center;
 }
+
 .Avatar {
 	margin-top: 5px;
 	margin-right: 15px;
@@ -456,15 +472,43 @@ header {
 	display: inline-block;
 	text-align: center;
 }
+
 .CartTitle {
 	display: inline-block;
 }
+
 .CartCount {
 	display: inline-block;
-	color:orange;
+	color: orange;
 }
 
 .logo {
 	height: 70px;
 	margin-right: 20px;
+}
+
+.logo:hover {
+	cursor: pointer;
+}
+
+.dropdown {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 170px;
+	margin-right: 100px;
+	margin-top: 75px;
+}
+
+.dropdown li {
+	background-color: white;
+	border: #0b76ac solid 1px;
+	padding: 10px;
+}
+
+.dropdown li:hover {
+	background-color: grey;
+	color: honeydew;
+	padding-left: 20px;
+	cursor: pointer;
 }

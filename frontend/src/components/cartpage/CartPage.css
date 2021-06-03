@@ -1,5 +1,9 @@
 .cart-page-container{
+    text-align: center;
     display: block;
+}
+.cart-page-container p{
+    display: inline-block;
 }
 .SearchBar {
     border-bottom: 1px solid gainsboro;
@@ -11,6 +15,7 @@
 }
 
 .total-cost{
+    margin-top: 40px;
     font-size: 25pt;
     color: salmon;
     width: 100%;
@@ -20,7 +25,33 @@
 .total-title {
     display: inline;
 }
+.span-name {
+    width: 200px;
+    margin: 20px 20px;
+}
+.span-author {
+    width: 150px;
+    margin: 20px 20px;
+}
 
+.span-real-price {
+    width: 150px;
+    margin: 20px 0px 20px 10px;
+}
+
+.span-discount-price {
+    width: 150px;
+    margin: 20px 10px;
+}
+
+.span-qty {
+    width: 100px;
+    margin: 20px 80px;
+}
+.span-total-cost {
+    width: 100px;
+    margin: 20px 5px 20px 5px
+}
 .buy {
     font-size: 30pt;
     font-weight: 600;

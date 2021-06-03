@@ -2,3 +2,35 @@
     text-align: center;
     display: block;
 }
+
+.login-page-container button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 826px;
+    display: block;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+}
+
+.login-page-container input {
+    padding: 0px 10px;
+    height: 30px;
+    width: 200px;
+}
+.email {
+    margin-bottom: 5px;
+}
+.password {
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+.login-title {
+    color: sandybrown;
+    font-weight: 600;
+    font-size: 30px;
+    margin-top: 250px;
+}
