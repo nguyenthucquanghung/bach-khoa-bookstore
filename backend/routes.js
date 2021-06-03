@@ -4,9 +4,9 @@
  * 2. If "path" is a object, then we assume it is a RegEx and use RegEx matching
  */
 
-const employeeController = require('./controllers/EmployeeController');
+const employeeController = require('./controllers/CartController');
 const bookController = require('./controllers/BookController');
-const projectController = require('./controllers/ProjectController');
+const projectController = require('./controllers/CategoryController');
 const userController = require('./controllers/UserController');
 
 const routes = [

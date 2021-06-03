@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const Employee = require('./../models/Employee');
-const Project = require('./../models/Project');
+const Employee = require('../models/Category');
+const Project = require('../models/Cart');
 const helpers = require('./../common/helpers');
 
-class EmployeeController {
+class CartController {
     // GET /employee
     async index (req, res) {
         try {
@@ -332,4 +332,4 @@ class EmployeeController {
     }
 }
 
-module.exports = new EmployeeController();
+module.exports = new CartController();

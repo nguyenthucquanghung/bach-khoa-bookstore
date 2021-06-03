@@ -14,7 +14,7 @@ const projectSchema = new Schema({
         type: Array, default: []
     },
 
-    // Project manager
+    // Cart manager
     managerId: {
         type: Schema.ObjectId
     }
@@ -23,7 +23,7 @@ const projectSchema = new Schema({
 
 const projectModel = BaseModel.model('projects', projectSchema);
 
-class Project {
+class Cart {
     static create (data) {
         const newProject = projectModel(data);
 
@@ -136,4 +136,4 @@ class Project {
 }
 
 
-module.exports = Project;
+module.exports = Cart;

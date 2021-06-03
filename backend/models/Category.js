@@ -36,7 +36,7 @@ const employeeSchema = new Schema({
         default: []
     },
 
-    // Employee's manager
+    // Category's manager
     managerId: {
         type: Schema.ObjectId
     }
@@ -56,7 +56,7 @@ employeeSchema.method('toClient', function () {
 
 const employeeModel = BaseModel.model('employees', employeeSchema);
 
-class Employee {
+class Category {
     static create (data) {
         const newEmployee = employeeModel(data);
 
@@ -169,4 +169,4 @@ class Employee {
 }
 
 
-module.exports = Employee;
+module.exports = Category;
