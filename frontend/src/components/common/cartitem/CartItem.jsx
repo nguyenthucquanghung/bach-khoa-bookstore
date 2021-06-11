@@ -21,24 +21,24 @@ export default class CartItem extends React.Component {
     render() {
         return (
             <div className="cart-item-container">
-                <span>Customer:</span>
-                <span>{this.props.data.username},</span>
-                <span>Email:</span>
-                <span>{this.props.data.email},</span>
-                <span>Status:</span>
-                <span>{
-                    this.props.data.status === 0 ? "New" : this.props.data.status === 1 ? "Accepted" : this.props.data.status === 2 ? "Finished" : "Canceled"
-                },</span>
-                <span className="date">Ngày mua: </span><span>{(new Date(this.props.data.time)).toString()}</span>
+                <p>Tên khách hàng:</p>
+                <p>{this.props.data.username},</p>
+                <p>Email:</p>
+                <p>{this.props.data.email},</p>
+                <p>Trạng thái đơn hàng:</p>
+                <p>{
+                    this.props.data.status === 0 ? "Chưa xác nhận" : this.props.data.status === 1 ? "Đã xác nhận" : this.props.data.status === 2 ? "Đã hoàn thành" : "Đã hủy"
+                },</p>
+                <p>Ngày mua: </p><p>{(new Date(this.props.data.time)).toString()}</p>
                 {(this.props.isAdmin && this.props.data.status !== 2 && this.props.data.status !== 3) && <button onClick={async () => {
                     await this.updateCart(this.props.data._id, 3);
-                }}>Cancel</button>}
+                }}>Hủy đơn hàng</button>}
                 {this.props.isAdmin && this.props.data.status === 0 && <button onClick={async () => {
                     await this.updateCart(this.props.data._id, 1);
-                }}>Accept</button>}
+                }}>Xác nhận</button>}
                 {this.props.isAdmin && this.props.data.status === 1 && <button onClick={async () => {
                     await this.updateCart(this.props.data._id, 2);
-                }}>Finish</button>}
+                }}>Hoàn thành</button>}
                 <table>
                     <tr>
                         <th>Cover</th>

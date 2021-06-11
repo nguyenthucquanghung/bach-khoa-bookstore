@@ -1,5 +1,5 @@
 .cart-item-container p {
-    vertical-align: top;
+    /* vertical-align: top; */
     border-left: gainsboro 1px solid;
     display: inline-block;
 }

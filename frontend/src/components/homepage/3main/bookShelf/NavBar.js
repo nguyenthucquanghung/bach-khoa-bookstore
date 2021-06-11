@@ -20,6 +20,26 @@ class NavBar extends Component {
 				cid: 839
 			},
 			{
+				name: "Sách kỹ năng sống",
+				cid: 870
+			},
+			{
+				name: "Sách kinh tế",
+				cid: 846
+			},
+			{
+				name: "Sách Tham Khảo",
+				cid: 2320
+			},
+			{
+				name: "Truyện Tranh, Manga, Comic",
+				cid: 1084
+			},
+			{
+				name: "Sách Kiến Thức Tổng Hợp",
+				cid: 873
+			},
+			{
 				name: "English Books",
 				cid: 320
 			},
